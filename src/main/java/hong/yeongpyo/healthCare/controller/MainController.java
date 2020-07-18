@@ -10,9 +10,9 @@ public class MainController {
 		
 		return "main";
 	}
-	@RequestMapping("/login.html")
+	@RequestMapping("/login")
 	public String mainasd() {
 		
-		return "login.html";
+		return "login";
 	}
 }

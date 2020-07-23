@@ -10,6 +10,7 @@
 	<properties>
 		<java-version>1.8</java-version>
 		<org.springframework-version>4.3.14.RELEASE</org.springframework-version>
+		<org.springframework.security-version>4.2.5.RELEASE</org.springframework.security-version>
 		<org.aspectj-version>1.8.9</org.aspectj-version>
 		<org.slf4j-version>1.7.25</org.slf4j-version>
 	</properties>
@@ -36,6 +37,23 @@
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
 		    <version>${org.springframework-version}</version>
+		</dependency>
+		
+		<!-- ... other dependency elements ... -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${org.springframework.security-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${org.springframework.security-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${org.springframework.security-version}</version>
 		</dependency>
 		
 		<!-- mysql -->

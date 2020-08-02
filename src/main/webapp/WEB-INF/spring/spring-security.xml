@@ -10,12 +10,12 @@
 	<http auto-config="true">	<!-- use-expressions="true"  true가 default  -->
 		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/index" access="permitAll"/>	<!-- hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN')도 가능 -->
-		<intercept-url pattern="/login" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/login" access="hasRole('ROLE_ANONYMOUS')"/>
 		<intercept-url pattern="/**" access="permitAll"/>
 
 		<form-login
-			username-parameter="loginid"
-			password-parameter="loginpwd"
+			username-parameter="loginEmail"
+			password-parameter="loginPwd"
 			login-page="/login"
 			default-target-url="/index"
 			authentication-failure-url="/login?fail=true"

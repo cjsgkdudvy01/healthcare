@@ -14,17 +14,23 @@
 		<link href="css/login.css" rel="stylesheet"> 
 	</head>
 	<body class="text-center">
-		<form class="form-signin" name="loginform" id="loginform" action="<c:url value='/myPage'/>" method="post">
+		<form class="form-signin" name="loginform" id="loginform" action="<c:url value='/loginProcess'/>" method="post">
 		<img class="mb-4" src="img/dolphin-logo.svg" alt="" width="72" height="72">
 		<h1 class="h3 mb-3 font-weight-normal">로그인</h1>
-		<input type="text" id="loginInputId" class="form-control" placeholder="아이디" autofocus>
-		<input type="password" id="loginInputPassword" class="form-control" placeholder="비밀번호" >
+		<input type="text" id="loginInputId" name="loginInputId" class="form-control" placeholder="아이디" autofocus>
+		<input type="text" id="loginInputPassword" name="loginInputPassword"  class="form-control" placeholder="비밀번호" >
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="checkbox mb-3">
 			<label>
 				<input type="checkbox" value="remember-me"> 아이디 기억하기
 			</label>
 		</div>
 		<button class="btn btn-lg btn-primary btn-block" id="login_btn">로그인</button>
+		<c:if test="${not empty param.fail}">
+			<p>로그인 실패, 다시 시도해 주세요</p>
+			<p>Reason: ${sessionScope["SPRING_SECURITY_LAST_EXXEPRION"].message}</p>
+			<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
+		</c:if>
 		<p class="mt-5 mb-3 text-muted">&copy; 2020-08-01</p>
 		</form>
 	</body>

@@ -9,15 +9,16 @@
 	<http pattern="/**/*.css" security="none"/>
 	<http auto-config="true">	<!-- use-expressions="true"  true가 default  -->
 		<intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/index" access="permitAll"/>	<!-- hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN')도 가능 -->
+		<intercept-url pattern="/myPage" access="hasRole('ROLE_USER')"/>	<!-- hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN')도 가능 -->
 		<intercept-url pattern="/login" access="hasRole('ROLE_ANONYMOUS')"/>
 		<intercept-url pattern="/**" access="permitAll"/>
 
 		<form-login
-			username-parameter="loginEmail"
-			password-parameter="loginPwd"
+			username-parameter="loginInputId"
+			password-parameter="loginInputPassword"
 			login-page="/login"
-			default-target-url="/index"
+		    login-processing-url="/loginProcess"
+			default-target-url="/myPage"
 			authentication-failure-url="/login?fail=true"
 		/>
 	</http>

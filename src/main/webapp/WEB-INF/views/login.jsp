@@ -28,7 +28,7 @@
 		<button class="btn btn-lg btn-primary btn-block" id="login_btn">로그인</button>
 		<c:if test="${not empty param.fail}">
 			<p>로그인 실패, 다시 시도해 주세요</p>
-			<p>Reason: ${sessionScope["SPRING_SECURITY_LAST_EXXEPRION"].message}</p>
+			<p>Reason: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
 			<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
 		</c:if>
 		<p class="mt-5 mb-3 text-muted">&copy; 2020-08-01</p>

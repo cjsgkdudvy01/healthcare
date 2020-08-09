@@ -30,4 +30,15 @@
 			</user-service>
 		</authentication-provider>
 	</authentication-manager>
+	<!-- 오류메세지 -->
+	<beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<beans:property name="basenames">
+			<beans:list>
+				<beans:value>/WEB-INF/properties/spring_security_message</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="defaultEncoding" value="UTF-8"/>
+		<beans:property name="cacheSeconds" value="5"/>
+	</beans:bean>
+	
 </beans:beans>

@@ -2,6 +2,7 @@ package hong.yeongpyo.healthCare.springSecurity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
@@ -21,9 +22,8 @@ public class Member implements UserDetails{
 	private int phonenum3;
 	private boolean gender;
 	private Set<GrantedAuthority> authorities;
-	
 	public Member(String id, String password, String name, int phonenum1, int phonenum2, int phonenum3, boolean gender,
-			Set<GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.id = id;
 		this.password = password;
@@ -32,13 +32,13 @@ public class Member implements UserDetails{
 		this.phonenum2 = phonenum2;
 		this.phonenum3 = phonenum3;
 		this.gender = gender;
-		this.authorities = authorities;
+		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
 	}
 	
 	public String getId() {
 		return id;
 	}
-
+	
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -75,7 +75,7 @@ public class Member implements UserDetails{
 		this.phonenum3 = phonenum3;
 	}
 
-	public boolean isGender() {
+	public boolean getGender() {
 		return gender;
 	}
 
@@ -87,44 +87,41 @@ public class Member implements UserDetails{
 		this.password = password;
 	}
 
-	public void setAuthorities(Set<GrantedAuthority> authorities) {
-		this.authorities = authorities;
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
 	}
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+		return authorities;
 	}
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return getId();
 	}
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	} 
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	private static SortedSet<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
@@ -139,8 +136,7 @@ public class Member implements UserDetails{
         return sortedAuthorities;
 	}
 	private static class AuthorityComparator implements Comparator<GrantedAuthority>, Serializable {
-        private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-
+		private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;	
         public int compare(GrantedAuthority g1, GrantedAuthority g2) {
             // Neither should ever be null as each entry is checked before adding it to the set.
             // If the authority is null, it is a custom authority and should precede others.

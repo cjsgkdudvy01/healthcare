@@ -20,8 +20,8 @@
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://localhost:3306/study"/>
-		<property name="username" value="hyp01"/>
-		<property name="password" value="1234"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
 		<property name="initialSize" value="100" />
 	    <property name="maxActive" value="150" />
 	    <property name="maxWait" value="10000" />

@@ -22,13 +22,15 @@
 			authentication-failure-url="/login?fail=true"
 		/>
 	</http>
+	<beans:bean id="CustomJdbcDaoImpl" class="hong.yeongpyo.healthCare.springSecurity.CustomJdbcDaoImpl">
+		<beans:property name="dataSource" ref="dataSource"/>
+		<beans:property name="rolePrefix" value=""/>
+		<beans:property name="usersByUsernameQuery" value="SELECT no, id, password, name, rrn1, rrn2, nick, phonenum1, phonenum2, phonenum3  FROM member WHERE ID = ?"/>
+		<beans:property name="authoritiesByUsernameQuery" value="SELECT code FROM authority where no in (SELECT auth_no FROM member_auth WHERE member_no=?)"/>
+		<beans:property name="enableGroups" value="false"/>
+	</beans:bean>
 	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="user1" password="1234" authorities="ROLE_USER"/>
-				<user name="admin1" password="1234" authorities="ROLE_ADMIN"/>
-			</user-service>
-		</authentication-provider>
+			<authentication-provider user-service-ref="CustomJdbcDaoImpl"/>
 	</authentication-manager>
 	<!-- 오류메세지 -->
 	<beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

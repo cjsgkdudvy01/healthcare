@@ -14,27 +14,39 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 public class Member implements UserDetails{
+	private int no;
 	private String id;
 	private String password;
 	private String name;
+	private String rrn1; 
+	private String rrn2;
+	private String nick;
 	private int phonenum1;
 	private int phonenum2;
 	private int phonenum3;
-	private boolean gender;
 	private Set<GrantedAuthority> authorities;
-	public Member(String id, String password, String name, int phonenum1, int phonenum2, int phonenum3, boolean gender,
+	public Member(int no, String id, String password, String name, String rrn1, String rrn2, String nick, int phonenum1, int phonenum2, int phonenum3, 
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
+		this.no = no;
 		this.id = id;
 		this.password = password;
 		this.name = name;
+		this.rrn1 = rrn1;
+		this.rrn2 = rrn2;
+		this.nick = nick;
 		this.phonenum1 = phonenum1;
 		this.phonenum2 = phonenum2;
 		this.phonenum3 = phonenum3;
-		this.gender = gender;
 		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
 	}
+	public int getNo() {
+		return no;
+	}
 	
+	public void setNo(int no) {
+		this.no = no;
+	}
 	public String getId() {
 		return id;
 	}
@@ -50,7 +62,31 @@ public class Member implements UserDetails{
 	public void setName(String name) {
 		this.name = name;
 	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getRrn1() {
+		return rrn1;
+	}
 
+	public void setRrn1(String rrn1) {
+		this.rrn1 = rrn1;
+	}
+
+	public String getRrn2() {
+		return rrn2;
+	}
+
+	public void setRrn2(String nick) {
+		this.nick = nick;
+	}
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 	public int getPhonenum1() {
 		return phonenum1;
 	}
@@ -66,27 +102,12 @@ public class Member implements UserDetails{
 	public void setPhonenum2(int phonenum2) {
 		this.phonenum2 = phonenum2;
 	}
-
 	public int getPhonenum3() {
 		return phonenum3;
 	}
-
 	public void setPhonenum3(int phonenum3) {
 		this.phonenum3 = phonenum3;
 	}
-
-	public boolean getGender() {
-		return gender;
-	}
-
-	public void setGender(boolean gender) {
-		this.gender = gender;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
 	}

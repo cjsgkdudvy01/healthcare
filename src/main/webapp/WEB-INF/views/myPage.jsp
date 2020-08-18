@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,7 +43,10 @@
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Sign out</a>
+      <form action="<c:url value="/logoutProcess"/>" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+      	<button type="submit" class="btn btn-dark">Sign out</button>
+      </form>
     </li>
   </ul>
 </nav>
@@ -88,6 +92,22 @@
               Integrations
             </a>
           </li>
+          <sec:authorize access="hasRole('ROLE_ADMIN')">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="layers"></span>
+                                관리자다~
+            </a>
+          </li>
+          </sec:authorize>
+          <sec:authorize access="hasRole('ROLE_USER')">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="layers"></span>
+                               사용자다~
+            </a>
+          </li>
+          </sec:authorize>
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">

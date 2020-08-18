@@ -21,6 +21,11 @@
 			default-target-url="/myPage"
 			authentication-failure-url="/login?fail=true"
 		/>
+		<logout
+			logout-url="logoutProcess"
+			logout-success-url="/login"
+			delete-cookies="JSESSIONID"
+		/>
 	</http>
 	<beans:bean id="CustomJdbcDaoImpl" class="hong.yeongpyo.healthCare.springSecurity.CustomJdbcDaoImpl">
 		<beans:property name="dataSource" ref="dataSource"/>

@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 
 public class CustomJdbcDaoImpl extends JdbcDaoImpl{
-	private static final Logger logger = LoggerFactory.getLogger(CustomJdbcDaoImpl.class);
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {

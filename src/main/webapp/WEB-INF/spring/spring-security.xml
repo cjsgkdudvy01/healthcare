@@ -3,8 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-		
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">	
 	<http pattern="/**/*.js" security="none"/>
 	<http pattern="/**/*.css" security="none"/>
 	<http auto-config="true">	<!-- use-expressions="true"  true가 default  -->
@@ -19,21 +18,39 @@
 			login-page="/login"
 		    login-processing-url="/loginProcess"
 			default-target-url="/myPage"
-			authentication-failure-url="/login?fail=true"
+			authentication-success-handler-ref="CustomAuthenticationSuccessHandler"
+			authentication-failure-handler-ref="customAuthenticationFailureHandler"
 		/>
 		<logout
-			logout-url="logoutProcess"
+			logout-url="/logoutProcess"
 			logout-success-url="/login"
 			delete-cookies="JSESSIONID"
 		/>
 	</http>
-	<beans:bean id="CustomJdbcDaoImpl" class="hong.yeongpyo.healthCare.springSecurity.CustomJdbcDaoImpl">
+	<!-- db연결 -->
+	<beans:bean id="CustomJdbcDaoImpl" class="#{projectIni['homePath']}.springSecurity.CustomJdbcDaoImpl">
 		<beans:property name="dataSource" ref="dataSource"/>
 		<beans:property name="rolePrefix" value=""/>
 		<beans:property name="usersByUsernameQuery" value="SELECT no, id, password, name, rrn1, rrn2, nick, phonenum1, phonenum2, phonenum3  FROM member WHERE ID = ?"/>
 		<beans:property name="authoritiesByUsernameQuery" value="SELECT code FROM authority where no in (SELECT auth_no FROM member_auth WHERE member_no=?)"/>
 		<beans:property name="enableGroups" value="false"/>
 	</beans:bean>
+	
+	<!-- 로그인 성공  후 -->
+	<beans:bean id="CustomAuthenticationSuccessHandler" class="#{projectIni['homePath']}.springSecurity.CustomAuthenticationSuccessHandler">
+		<beans:property name="targetUrlParameter" value="loginRedirect"></beans:property>
+		<beans:property name="useReferer" value="false"></beans:property>	<!-- referer헤더 사용여부 -->
+		<beans:property name="defaultUrl" value="/myPage"></beans:property> <!-- 지정된  url이 없을 경우 -->
+	</beans:bean>
+	
+	<beans:bean id="customAuthenticationFailureHandler" class="#{projectIni['homePath']}.springSecurity.CustomAuthenticationFailureHandler">
+		<beans:property name="loginidname" value="loginid" />
+	<beans:property name="loginpasswdname" value="loginpwd" />
+	<beans:property name="loginredirectname" value="loginRedirect" />
+	<beans:property name="exceptionmsgname" value="securityexceptionmsg" />
+	<beans:property name="defaultFailureUrl" value="/login?fail=true" />
+	</beans:bean>
+	
 	<authentication-manager>
 			<authentication-provider user-service-ref="CustomJdbcDaoImpl"/>
 	</authentication-manager>
@@ -41,7 +58,7 @@
 	<beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<beans:property name="basenames">
 			<beans:list>
-				<beans:value>/WEB-INF/properties/spring_security_message</beans:value>
+				<beans:value>classpath:properties/spring_security_message</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="defaultEncoding" value="UTF-8"/>

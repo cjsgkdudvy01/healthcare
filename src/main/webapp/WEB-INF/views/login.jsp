@@ -20,15 +20,16 @@
 		<input type="text" id="loginInputId" name="loginInputId" class="form-control" placeholder="아이디" autofocus>
 		<input type="text" id="loginInputPassword" name="loginInputPassword"  class="form-control" placeholder="비밀번호" >
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		<input type="hidden" name="loginRedirect" value="${loginRedirect}"/>
 		<div class="checkbox mb-3">
 			<label>
 				<input type="checkbox" value="remember-me"> 아이디 기억하기
 			</label>
 		</div>
 		<button class="btn btn-lg btn-primary btn-block" id="login_btn">로그인</button>
-		<c:if test="${not empty param.fail}">
+		<c:if test="${param.fail == true}">
 			<p>로그인 실패, 다시 시도해 주세요</p>
-			<p>Reason: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
+			<p>Reason: ${securityexceptionmsg}</p>
 			<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
 		</c:if>
 		<p class="mt-5 mb-3 text-muted">&copy; 2020-08-01</p>

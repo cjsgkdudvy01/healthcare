@@ -46,7 +46,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public void setDefaultUrl(String defaultUrl) {
 		this.defaultUrl = defaultUrl;
 	}
-	public boolean isUseReferer() {
+	public boolean getUseReferer() {
 		return useReferer;
 	}
 	public void setUseReferer(boolean useReferer) {
@@ -60,7 +60,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		
 		clearAuthenticationAttributes(request);			//인증예외를 지운다.
 		
-		int intRedirectStrategy = decideRedirectStrategy(request, response);
+		int intRedirectStrategy = decideRedirectStrategy(request, response);	//
 		switch(intRedirectStrategy){
 		case 1:
 			useTargetUrl(request, response);

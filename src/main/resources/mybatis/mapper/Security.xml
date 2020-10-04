@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace ="security">
+
+	<select id="loadUsersByUsername" parameterType="java.lang.String" resultType="MemberDtoNoAuth">
+		SELECT no, id, password, name, rrn1, rrn2, nick, phonenum1, phonenum2, phonenum3 FROM member WHERE ID = #{username};
+	</select>
+	<select id="authoritiesByUsername" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT code FROM authority where no in (SELECT auth_no FROM member_auth WHERE member_no=#{no})
+	</select>
+	
+	<!-- SecuredObjDao -->
+	<!-- url 형식인 보호자원 - Role 맵핑정보를 조회하는 default 쿼리이다 -->
+	<select id="sqlRolesAndUrl" resultType="java.util.HashMap">
+		SELECT A.PATTERN AS URL, C.CODE AS AUTHORITY
+    	FROM SECURED_RESOURCE A, SECURED_RESOURCE_AUTH B, AUTHORITY C 
+    	WHERE A.NO = B.SECURED_RESOURCE_NO
+    			AND B.AUTH_NO = C.NO 
+    			AND A.TYPE = 'url' 
+    	ORDER BY A.SORT; 
+	</select>
+	
+	<!-- method 형식인 보호자원 - Role 맵핑정보를 조회하는 default 쿼리이다. -->
+	<select id="sqlRolesAndMethod" resultType="java.util.HashMap">
+		SELECT A.PATTERN AS METHOD, C.CODE AS AUTHORITY
+        FROM SECURED_RESOURCE A, SECURED_RESOURCE_AUTH B, AUTHORITY C
+        WHERE A.NO = B.SECURED_RESOURCE_NO
+        		AND B.AUTH_NO = C.NO 
+        		AND A.TYPE = 'method'
+        ORDER BY A.SORT;
+	</select>
+	
+	<!-- pointcut 형식인 보호자원 - Role 맵핑정보를 조회하는 default 쿼리이다. -->
+	<select id="sqlRolesAndPointcut" resultType="java.util.HashMap">
+		SELECT A.PATTERN AS POINTCUT, C.CODE AS AUTHORITY
+     	FROM SECURED_RESOURCE A, SECURED_RESOURCE_AUTH B, AUTHORITY C
+        WHERE A.NO = B.SECURED_RESOURCE_NO
+        		AND B.AUTH_NO = C.NO 
+        		AND A.TYPE = 'pointcut'
+        ORDER BY A.SORT;
+	</select>
+	
+	<!-- 매 request 마다 best matching url 보호자원 - Role 맵핑정보를 얻기위한 default 쿼리이다. (Oracle 10g specific) -->
+	<select id="sqlRegexMatchedRequestMapping" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT a.pattern as uri, d.code as authority
+        FROM secured_resource a, secured_resource_auth b, AUTHORITY d
+	    WHERE a.no = b.secured_resource_no
+	    		AND b.auth_no = d.no 
+			    AND a.no =  
+		        	( SELECT NO
+		        	FROM 
+		            	( SELECT no, ROW_NUMBER() OVER (ORDER BY sort) as resource_order 
+		            	FROM secured_resource c
+		                WHERE REGEXP_LIKE ( :#{url}, c.pattern )
+		                  		AND c.type = #{url}
+		                ORDER BY c.sort )
+		            WHERE resource_order = 1 );
+	</select>
+	
+	<!-- Role 의 계층(Hierarchy) 관계를 조회하는 default 쿼리이다. -->
+	<select id="sqlHierarchicalRoles" resultType="java.util.HashMap">
+		SELECT a.child_role as child, a.parent_role as parent
+        FROM ROLES_HIERARCHY a LEFT JOIN ROLES_HIERARCHY b on (a.child_role = b.parent_role); 
+	</select>
+</mapper>	

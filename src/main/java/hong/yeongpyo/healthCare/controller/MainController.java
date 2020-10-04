@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import hong.yeongpyo.healthCare.springSecurity.Member;
+import hong.yeongpyo.healthCare.springSecurity.dto.MemberDto;
 
 @Controller
 public class MainController {
@@ -14,8 +14,8 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = auth.getPrincipal();
 		String name = "";
-		if(principal != null&& principal instanceof Member)
-			name = ((Member)principal).getName();
+		if(principal != null&& principal instanceof MemberDto)
+			name = ((MemberDto)principal).getName();
 		System.out.println("사용자 이름: "+name);
 		return "myPage";
 	}

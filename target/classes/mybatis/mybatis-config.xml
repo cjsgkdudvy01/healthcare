@@ -19,7 +19,10 @@
 		  <!-- <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/> -->
 	</settings>
 	<typeAliases>
-		<typeAlias type="hong.yeongpyo.healthCare.dto.MemberDto" alias="MemberDto"/>
+	
+		<!-- 시큐리티 -->
+		<typeAlias type="hong.yeongpyo.healthCare.springSecurity.dto.MemberDtoNoAuth" alias="MemberDtoNoAuth"/>	
+		<typeAlias type="hong.yeongpyo.healthCare.springSecurity.dto.MemberDto" alias="MemberDto"/>
 		<typeAlias type="hong.yeongpyo.healthCare.dto.WeightDto" alias="WeightDto"/>
 	</typeAliases>
 </configuration>

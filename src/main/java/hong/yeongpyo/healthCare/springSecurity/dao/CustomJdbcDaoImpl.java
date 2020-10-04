@@ -1,7 +1,5 @@
-package hong.yeongpyo.healthCare.springSecurity;
+package hong.yeongpyo.healthCare.springSecurity.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,26 +8,26 @@ import java.util.Set;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 
+import hong.yeongpyo.healthCare.springSecurity.dto.MemberDtoNoAuth;
+
 public class CustomJdbcDaoImpl extends JdbcDaoImpl{
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+	public CustomJdbcDaoImpl(SqlSessionTemplate sqlSessionTemplate) {
 		this.sqlSessionTemplate = sqlSessionTemplate;
 	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		List<UserDetails> users = loadUsersByUsername(username);
-		Member user = (Member)users.get(0);
+		MemberDtoNoAuth user = (MemberDtoNoAuth)users.get(0);
 		Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
 		
 		if(users.size() == 0) {
@@ -53,36 +51,23 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
 		}
 		return user;
 	}
+	
 	@Override
 	protected List<UserDetails> loadUsersByUsername(String username) {
-		return getJdbcTemplate().query(getUsersByUsernameQuery(), new String[] {username}, new RowMapper<UserDetails>() {
-			public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException{
-				int no = rs.getInt (1);
-				String username = rs.getString (2);
-				String password = rs.getString (3);
-				String name = rs.getString (4);
-				String rrn1 = rs.getString (5);
-				String rrn2 = rs.getString(6);
-				String nick = rs.getString(7);
-				int phonenum1 = rs.getInt (8);
-				int phonenum2 = rs.getInt (9);
-				int phonenum3 = rs.getInt (10);
-				
-				return new Member(no, username, password, name, rrn1, rrn2, nick, phonenum1, phonenum2, phonenum3, AuthorityUtils.NO_AUTHORITIES);	//sqlsession으로 작업하도록 변결
-			}
-			
-		});
+		List<UserDetails>loadUsers = sqlSessionTemplate.selectList("loadUsersByUsername", username);
+		
+		return loadUsers;
 	}
+	
 	protected List<GrantedAuthority> loadUserAuthorities(Integer no) {
-		// TODO Auto-generated method stub
-		return getJdbcTemplate().query(getAuthoritiesByUsernameQuery(), new Integer[] {no}, new RowMapper<GrantedAuthority>() {
-            public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
-                String roleName = getRolePrefix() + rs.getString(1);
-
-                return new SimpleGrantedAuthority(roleName);
-            }
-        });
+		List<String> simpleGrantedAuthorityList = sqlSessionTemplate.selectList("authoritiesByUsername", no); 
+		List<GrantedAuthority> simpleGrantedAuthority =  new ArrayList<GrantedAuthority>();  
+		for(int i=0 ; i<simpleGrantedAuthorityList.size() ; i++) {
+			simpleGrantedAuthority.add(i, new SimpleGrantedAuthority(simpleGrantedAuthorityList.get(i)));
+		}		
+		return simpleGrantedAuthority;
 	}
+	
 	@Override
 	protected List<GrantedAuthority> loadGroupAuthorities(String username) {
 		// TODO Auto-generated method stub

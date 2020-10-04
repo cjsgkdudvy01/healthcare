@@ -1,4 +1,4 @@
-package hong.yeongpyo.healthCare.springSecurity;
+package hong.yeongpyo.healthCare.springSecurity.controller;
 
 import java.io.IOException;
 
@@ -28,31 +28,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	private boolean useReferer;
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	
-	public CustomAuthenticationSuccessHandler(){
-		targetUrlParameter = "";
-		defaultUrl = "/";
-		useReferer = false;
-	}
-	
-	public String getTargetUrlParameter() {
-		return targetUrlParameter;
-	}
-	public void setTargetUrlParameter(String targetUrlParameter) {
+	public CustomAuthenticationSuccessHandler(String targetUrlParameter, String defaultUrl, boolean useReferer){
 		this.targetUrlParameter = targetUrlParameter;
-	}
-	public String getDefaultUrl() {
-		return defaultUrl;
-	}
-	public void setDefaultUrl(String defaultUrl) {
 		this.defaultUrl = defaultUrl;
-	}
-	public boolean getUseReferer() {
-		return useReferer;
-	}
-	public void setUseReferer(boolean useReferer) {
 		this.useReferer = useReferer;
 	}
-
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

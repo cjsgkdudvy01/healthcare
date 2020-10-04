@@ -1,4 +1,4 @@
-package hong.yeongpyo.healthCare.springSecurity;
+package hong.yeongpyo.healthCare.springSecurity.dto;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
-public class Member implements UserDetails{
+public class MemberDto implements UserDetails{
 	private int no;
 	private String id;
 	private String password;
@@ -25,7 +25,7 @@ public class Member implements UserDetails{
 	private int phonenum2;
 	private int phonenum3;
 	private Set<GrantedAuthority> authorities;
-	public Member(int no, String id, String password, String name, String rrn1, String rrn2, String nick, int phonenum1, int phonenum2, int phonenum3, 
+	public MemberDto(int no, String id, String password, String name, String rrn1, String rrn2, String nick, int phonenum1, int phonenum2, int phonenum3, 
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.no = no;
